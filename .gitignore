@@ -1,0 +1,13 @@
+cat > .gitignore << 'EOF'
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.env
+
+app/data/index/chroma/
+app/data/processed/
+app/data/raw/
+
+*.log
+.DS_Store
+EOF
