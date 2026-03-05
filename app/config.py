@@ -21,6 +21,8 @@ class Settings:
     CHROMA_DIR.mkdir(parents=True, exist_ok=True)
     COLLECTION_NAME = "nordgard_rules"
 
+    RAW_PDF = APP_DIR / "data" / "raw" / "nordguard_game_tutorial.pdf"
+
     LLM_MODEL="gpt-4o-mini"
     EMBEDDING_MODEL="text-embedding-3-small"
     TOP_K = 5
