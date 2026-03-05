@@ -1,4 +1,7 @@
 ### 1.0.0
+
+![img_1.png](img_1.png)
+
 ### description
 NLP RAG project based on PDF files table game tutorial.
 game "Нордгард: Новые земли"
