@@ -13,7 +13,6 @@ langchain-community==0.4.1
 langchain-openai==1.1.10
 matplotlib==3.10.8
 opentelemetry-instrumentation-fastapi==0.60b1
-pandas==3.0.1
 pdfminer-six==20251230
 pdfplumber==0.11.9
 pip-chill==1.0.3

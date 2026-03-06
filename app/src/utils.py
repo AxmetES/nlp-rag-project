@@ -1,5 +1,9 @@
+import re
 import json
 from pathlib import Path
+
+from schemas import Chunk
+
 
 def save_splits_to_jsonl(splits, out_path: str):
     out_path = Path(out_path)
@@ -16,8 +20,6 @@ def save_splits_to_jsonl(splits, out_path: str):
 
     print(f"💾 Saved {len(splits)} chunks to {out_path}")
 
-
-import re
 
 def clean_pdf_docs_inplace(docs) -> None:
     for d in docs:
@@ -37,8 +39,7 @@ def clean_pdf_docs_inplace(docs) -> None:
         d.page_content = t.strip()
 
 
-
-from typing import List
+from typing import List, Any
 from sentence_transformers import CrossEncoder
 
 _MODEL_NAME = "BAAI/bge-reranker-v2-m3"
@@ -58,3 +59,16 @@ def docs_to_context(docs, max_docs=5):
         page = d.metadata.get("page")
         parts.append(f"[стр.{page}] {d.page_content.strip()}")
     return "\n\n".join(parts)
+
+
+def docs_to_chunks(docs_scores) -> list[Chunk]:
+    out: list[Chunk] = []
+    for doc, score in docs_scores:
+        meta = doc.metadata or {}
+        source = meta.get("source") or meta.get("file") or meta.get("path") or meta.get("page_label")
+        out.append(Chunk(
+            text=doc.page_content,
+            source=str(source) if source is not None else None,
+            score=float(score) if score is not None else None,
+        ))
+    return out

@@ -6,8 +6,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 
-from app.config import settings
-from app.src.utils import clean_pdf_docs_inplace
+from config import settings
+from src.utils import clean_pdf_docs_inplace
 
 
 def build_index(force: bool = False):

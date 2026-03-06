@@ -1,10 +1,21 @@
 services:
   npl_api:
-    build: .
-    env_file: .env
+    build:
+      context: app
+      dockerfile: Dockerfile
+    env_file:
+      - .env
     ports:
       - "8000:8000"
-    volumes:
-      - ./app/data:/app/app/data
-      - ./app:/app/app
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  streamlit:
+    build:
+      context: ui
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://npl_api:8000/v1/chat
+    depends_on:
+      - npl_api

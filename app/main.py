@@ -1,14 +1,14 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import time
 
-from app.config import settings
-from app.rag import rag_context, get_vectorstore, is_index_ready
-from app.schemas import ChatRequest, ChatResponse
-from app.llm import run_llm
-from app.src.build_index import build_index
-from app.src.memory import get_history, add_message, history_to_text
+from rag import rag_context, get_vectorstore, is_index_ready
+from schemas import ChatRequest, ChatResponse
+from llm import run_llm
+from src.build_index import build_index
+from src.memory import get_history, add_message, history_to_text
+from src.utils import docs_to_context, docs_to_chunks
 
 load_dotenv()
 
@@ -65,12 +65,14 @@ def health():
 def chat(req: ChatRequest):
     chat_id = req.chat_id
     question = req.question
+    top_k = req.top_k
 
     history = get_history(chat_id)
     history_text = history_to_text(history)
     vs = app.state.vectorstore
-    context = rag_context(question, vs, k=settings.TOP_K)
+    docs_score = rag_context(question, vs, k=top_k)
 
+    context = docs_to_context([doc for doc, _ in docs_score])
     messages = [{"role": "system", "content": f"Контекст:\n{context}"}]
     messages += history
     messages += [{"role": "user", "content": question}]
@@ -79,5 +81,5 @@ def chat(req: ChatRequest):
 
     add_message(chat_id, "user", question)
     add_message(chat_id, "assistant", answer)
-
-    return ChatResponse(answer=answer)
+    chunks = docs_to_chunks(docs_score)
+    return ChatResponse(answer=answer, chunks=chunks)

@@ -1,11 +1,8 @@
-import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
-from app.config import settings
-from app.src.memory import history_to_text
+from config import settings
 
 load_dotenv()
 
