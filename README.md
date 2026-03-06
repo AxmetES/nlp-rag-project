@@ -52,3 +52,9 @@ when FastAPI starts, vectordb will be created and filled with data from pdf file
     "model": "gpt-4o-mini"
 }
 ```
+
+### Streamlit
+ open page ```bash http://localhost:8501/```
+to make request to API
+
+![img.png](img.png)
